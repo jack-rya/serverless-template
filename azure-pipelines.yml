@@ -1,0 +1,36 @@
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+  - task: NodeTool@0
+    displayName: 'Installing Node 14'
+    inputs:
+      versionSpec: '14.x'
+
+  - script: yarn install --production
+    displayName: 'Install dependencies'
+
+  - task: CopyFiles@2
+    displayName: 'Copy app files to directory for archiving'
+    inputs:
+      contents: |
+        dist/**
+        node_modules/**
+        package.json
+        serverless.yml
+      targetFolder: $(Agent.BuildDirectory)/app-files
+
+  - task: ArchiveFiles@2
+    displayName: 'Archive files and output to staging directory'
+    inputs:
+      rootFolderOrFile: $(Agent.BuildDirectory)/app-files
+      includeRootFolder: false
+      archiveType: tar
+      tarCompression: gz
+      archiveFile: $(Build.ArtifactStagingDirectory)/app-files.tgz
+      replaceExistingArchive: true
+
+  - task: PublishBuildArtifacts@1
+    displayName: 'Publish build artifacts'
+    inputs:
+      ArtifactName: 'serverless-scaffold'

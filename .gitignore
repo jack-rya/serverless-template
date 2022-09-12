@@ -1,0 +1,22 @@
+# Logs
+logs
+*.log
+
+coverage
+*.lcov
+
+# nyc test coverage
+.nyc_output
+
+# Dependency directories
+node_modules/
+
+# dotenv environment variables file
+.env
+.env.test
+
+# Serverless directories
+.serverless/
+
+# IDE Config
+.vscode

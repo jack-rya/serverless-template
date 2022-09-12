@@ -1,0 +1,35 @@
+service: FileImporter
+
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  region: eu-west-2
+  stage: ${opt:stage}
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - s3:ListBucket
+          Resource:
+            - 'arn:aws:s3:::${self:custom.defaultBucketName}'
+
+functions:
+  fileImport:
+    handler: dist/pushprocess
+    # events:
+    # - schedule: ${param:cronOverride, "cron(0 7 * * ? *)"}
+    # environment:
+    # DEFAULT_BUCKET_NAME: ${self:custom.defaultBucketName}
+resources:
+  Resources:
+    FileImporterStore:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: ${self:custom.defaultBucketName}
+
+custom:
+  environment: ${file(./config.${self:provider.stage}.json), ""}
+  defaultBucketName: huboo-file-importer-store-${self:provider.stage}

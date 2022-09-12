@@ -1,0 +1,22 @@
+{
+  "name": "serverless-template",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "private": true,
+  "type": "commonjs",
+  "scripts": {
+    "test": "jest",
+    "build": "tsc",
+    "build-dev": "tsc --sourceMap",
+    "prettier": "prettier src --write",
+    "prettier-tests": "prettier tests --write",
+    "coverage": "jest --coverage",
+    "inspect": "node --inspect=0.0.0.0:9229 dist/main.js",
+    "dev-check": "yarn run prettier && yarn run prettier-tests && yarn run lint && yarn run lint-tests && yarn ts-coverage && yarn run test && yarn run build-dev"
+  },
+  "dependencies": {
+    "@types/node": "^18.7.16",
+    "typescript": "^4.8.3"
+  }
+}
